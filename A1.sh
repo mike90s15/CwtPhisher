@@ -1,4 +1,4 @@
-xdg-open https://chat.whatsapp.com/FnqHx08Dwo7CGnmrAu8WsY
+xdg-open https://instagram.com/mike90s15
 sleep 2
 xdg-open https://t.me/Clownters 
 sleep 2
